@@ -16,7 +16,7 @@ export default function Index({ auth, tasks, queryParams = null }) {
             delete queryParams[name]
         }
 
-        router.get(route('Task.index'), queryParams);
+        router.get(route('task.index'), queryParams);
     }
 
     const onKeyPress = (name, e) => {
@@ -37,7 +37,7 @@ export default function Index({ auth, tasks, queryParams = null }) {
             queryParams.sort_direction = 'asc';
         }
 
-        router.get(route('Task.index'), queryParams);
+        router.get(route('task.index'), queryParams);
     }
 
     return (
