@@ -1,6 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.jsx";
-import {Head} from "@inertiajs/react";
-import {TASK_STATUS_TEXT_MAP} from "@/constants.jsx";
+import {Head, Link} from "@inertiajs/react";
+import {TASK_PRIORITY_TEXT_MAP, TASK_STATUS_TEXT_MAP} from "@/constants.jsx";
 import TasksTable from "@/Pages/Task/TasksTable.jsx";
 
 export default function Show({ auth, task, tasks, queryParams }) {
@@ -42,6 +42,10 @@ export default function Show({ auth, task, tasks, queryParams }) {
                                         <p>{TASK_STATUS_TEXT_MAP[task.status]}</p>
                                     </div>
                                     <div className="flex-1 items-center">
+                                        <label className="font-bold text-lg">Task Priority</label>
+                                        <p>{TASK_PRIORITY_TEXT_MAP[task.priority]}</p>
+                                    </div>
+                                    <div className="flex-1 items-center">
                                         <label className="font-bold text-lg">Created By</label>
                                         <p>{task.createdBy.name}</p>
                                     </div>
@@ -54,6 +58,16 @@ export default function Show({ auth, task, tasks, queryParams }) {
                                     <div className="flex-1 items-center">
                                         <label className="font-bold text-lg">Creation Date</label>
                                         <p>{task.created_at}</p>
+                                    </div>
+                                    <div className="flex-1 items-center">
+                                        <label className="font-bold text-lg">Project</label>
+                                        <p>
+                                            <Link className={"hover:underline"} href={route('project.show', task.project.id)}>{task.project.name}</Link>
+                                        </p>
+                                    </div>
+                                    <div className="flex-1 items-center">
+                                        <label className="font-bold text-lg">Assigned User </label>
+                                        <p>{task.assignedUser.name}</p>
                                     </div>
                                     <div className="flex-1 items-center">
                                         <label className="font-bold text-lg">Updated By</label>
@@ -69,17 +83,6 @@ export default function Show({ auth, task, tasks, queryParams }) {
                     </div>
                 </div>
             </div>
-
-            <div className="pb-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                                <TasksTable tasks={tasks} queryParams={queryParams} hideTaskColumn={true}/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </AuthenticatedLayout>
     )
 }
