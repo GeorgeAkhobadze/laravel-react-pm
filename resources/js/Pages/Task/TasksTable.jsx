@@ -5,7 +5,7 @@ import {TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP} from "@/constants.jsx";
 import {Link, router} from "@inertiajs/react";
 import Pagination from "@/Components/Pagination.jsx";
 
-export default function TasksTable({ tasks, queryParams = null, hideProjectColumn = false }) {
+export default function TasksTable({ tasks, queryParams = null, hideProjectColumn = false, success }) {
     queryParams = queryParams || {}
     const searchFieldChanged = (name, value) => {
         if(value) {
@@ -37,8 +37,16 @@ export default function TasksTable({ tasks, queryParams = null, hideProjectColum
         router.get(route('task.index'), queryParams);
     }
 
+    const deleteTask = (ev, task) => {
+        if(!window.confirm('Are you sure you want to delete?')) {
+            return;
+        }
+        router.delete(route('task.destroy', task.id))
+    }
+
     return (
         <>
+            {success && <div className="bg-emerald-500 px-4 text-white">{success}</div>}
             <div className="overflow-auto">
                 <table className="w-full text-sm text-left text-gray-500">
                     <thead
@@ -108,7 +116,7 @@ export default function TasksTable({ tasks, queryParams = null, hideProjectColum
                                 <img src={task.image_path} alt={task.name}
                                      className="w-16 h-16 object-cover rounded"/>
                             </td>
-                            <td className="px-4 py-3">{task.project.name}</td>
+                            {!hideProjectColumn && <td className="px-4 py-3">{task.project.name}</td>}
                             <td className="px-4 py-3">{task.name}</td>
                             <td className="px-4 py-3 text-center">
                                 <p className={"px-2 text-center py-1 rounded text-white w-24 " + TASK_STATUS_CLASS_MAP[task.status]}>
@@ -121,8 +129,8 @@ export default function TasksTable({ tasks, queryParams = null, hideProjectColum
                             <td className="px-4 py-3 text-center">
                                 <Link href={route('task.edit', task.id)}
                                       className="font-medium text-blue-600 hover:underline mx-1">Edit</Link>
-                                <Link href={route('task.destroy', task.id)}
-                                      className="font-medium text-red-600 hover:underline mx-1">Delete</Link>
+                                <button onClick={(e) => deleteTask(e, task)}
+                                      className="font-medium text-red-600 hover:underline mx-1">Delete</button>
                             </td>
                         </tr>
                     ))}
